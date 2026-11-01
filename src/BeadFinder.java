@@ -1,16 +1,24 @@
 import java.util.ArrayList;
+import java.util.Stack;
 import java.awt.Color;
 
 public class BeadFinder {
-    private Picture picture;
-    private int width;
-    private int height;
-    private double tau;
-    private boolean[][] isVisited;
-    private boolean[][] isForeground;
-    private ArrayList<IBlob> blobs;
+    private final Picture picture;
 
-    // ---Cinstructor---------------------------------
+    private final int width;
+    private final int height;
+
+    private final double tau;
+
+    private final boolean[][] isVisited;
+    private final boolean[][] isForeground;
+
+    private final ArrayList<IBlob> blobs;
+
+    private final int[] dx = { 0, 1, 0, -1 };
+    private final int[] dy = { -1, 0, 1, 0 };
+
+    // ---Constructor---------------------------------
     public BeadFinder(Picture picture, double tau) {
         this.picture = picture;
         this.tau = tau;
@@ -57,25 +65,40 @@ public class BeadFinder {
 
     }
 
-    private void dfsSearch(IBlob blob, int x, int y) {
-        if (((x < 0) || (x >= width) || (y < 0) || (y >= height))
-                || isVisited[x][y])
+    private void dfsSearch(IBlob blob, int startX, int startY) {
+        if (((startX < 0) || (startX >= width) ||
+                (startY < 0) || (startY >= height)) ||
+                isVisited[startX][startY])
             return;
 
-        isVisited[x][y] = true;
+        isVisited[startX][startY] = true;
+        blob.add(startX, startY);
 
-        if (!isForeground[x][y])
-            return;
+        java.util.Stack<int[]> stack = new Stack<>();
+        stack.push(new int[] { startX, startY });
 
-        blob.add(x, y);
-        // forward(y - 1 because Picture the fourth quadrant of the coordinate system)
-        dfsSearch(blob, x, y - 1);
-        // rightward
-        dfsSearch(blob, x + 1, y);
-        // backward
-        dfsSearch(blob, x, y + 1);
-        // leftward
-        dfsSearch(blob, x - 1, y);
+        int[] current;
+        int x, y;
+
+        while (!stack.isEmpty()) {
+            current = stack.pop();
+
+            for (int i = 0; i < 4; i++) {
+                x = current[0] + dx[i];
+                y = current[1] + dy[i];
+
+                if (((x < 0) || (x >= width) || (y < 0) || (y >= height)) || isVisited[x][y])
+                    continue;
+
+                isVisited[x][y] = true;
+
+                if (!isForeground[x][y])
+                    continue;
+
+                stack.push(new int[] { x, y });
+                blob.add(x, y);
+            }
+        }
     }
 
     private void findWhitePixels() {
@@ -99,7 +122,7 @@ public class BeadFinder {
 
         int min = 25;
         double tau = 180.0;
-        String imagePath = "D:\\Uni\\Java_Projects\\The_Atomin_Nature_Of_Matter\\Atomic-Nature-of-Matter-master\\Atomic-Nature-of-Matter-master\\Dataset\\run_1\\frame00001.jpg";
+        String imagePath = "D:\\Uni\\3rd_Semester\\Data_Structures\\Geeks\\1st_projecy_ANoM\\image folders\\run_1\\frame00001.jpg";
 
         // Allow command-line arguments
         if (args.length != 0) {
