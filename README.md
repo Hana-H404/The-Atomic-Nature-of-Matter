@@ -3,6 +3,9 @@
 ![Java](https://img.shields.io/badge/Java-10%2B-orange?logo=openjdk&logoColor=white)
 ![Type](https://img.shields.io/badge/type-university%20project-blue)
 ![Topic](https://img.shields.io/badge/topic-Brownian%20motion-green)
+![OOP](https://img.shields.io/badge/OOP-encapsulation%20%7C%20abstraction%20%7C%20polymorphism-purple)
+![SOLID](https://img.shields.io/badge/design-SOLID%20principles-red)
+![License](https://img.shields.io/badge/license-MIT-yellow)
 
 > Estimating **Avogadro's number** from the Brownian motion of microscopic beads, using blob detection, frame-to-frame tracking and the Einstein–Stokes relation.
 
@@ -16,6 +19,7 @@ This project re-creates the experiment that Jean Perrin used in the early 1900s 
 - [Features](#features)
 - [Scientific Background](#scientific-background)
 - [Architecture](#architecture)
+- [Design Principles](#design-principles)
 - [Algorithms](#algorithms)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
@@ -173,6 +177,31 @@ sequenceDiagram
     end
     T->>W: close()
 ```
+
+## Design Principles
+
+The code is organised around object-oriented design and the SOLID principles.
+
+### Object-oriented programming
+
+| Concept | Where it appears |
+|---------|------------------|
+| Encapsulation | `Blob` keeps `mass`, `sumX` and `sumY` private and exposes only the `IBlob` methods. `BeadFinder` hides its pixel arrays and search helpers behind `getBeads`. |
+| Abstraction | `IBlob` describes what a blob can do (add a pixel, report mass and center, measure distance) without revealing how it is stored. |
+| Polymorphism | `BeadFinder`, `BeadTracker` and the tracking logic work with `IBlob` references, so any implementation can be used. |
+| Interface implementation | `Blob implements IBlob`. |
+
+### SOLID
+
+| Principle | How the project applies it |
+|-----------|----------------------------|
+| **S**ingle Responsibility | Each class has one job: `Blob` (blob geometry), `BeadFinder` (detection), `BeadTracker` (matching across frames), `DistanceWriter` / `DistanceReader` (file I/O), `Avogadro` (physics calculation). |
+| **O**pen/Closed | New blob representations can be added by implementing `IBlob`, without changing the tracking or estimation code. |
+| **L**iskov Substitution | Any `IBlob` implementation can replace `Blob`. `Blob` honours the contract, for example by throwing `IllegalStateException` when the center of an empty blob is requested. |
+| **I**nterface Segregation | `IBlob` is small and focused: six methods, all related to a blob. Clients are not forced to depend on anything unrelated. |
+| **D**ependency Inversion | The detection and tracking code consumes the `IBlob` abstraction rather than a concrete type. |
+
+> **Note:** the last two points are only partially realised. `BeadFinder` still creates `new Blob()` itself, and `BeadTracker` creates `BeadFinder` and `DistanceWriter` directly. Injecting a blob factory and the writer would complete Dependency Inversion and Open/Closed (see the [Roadmap](#roadmap)).
 
 ## Algorithms
 
@@ -337,13 +366,22 @@ Let `W × H` be the image size, `F` the number of frames and `B` the number of b
 - [ ] Pass the output file path through `DistanceWriter` and `DistanceReader`
 - [ ] Move physical constants into a configuration file or constructor arguments
 - [ ] One-to-one bead matching between frames
+- [ ] Inject a blob factory and the distance writer to fully satisfy Dependency Inversion
 - [ ] Unit tests for `Blob`, `BeadFinder` and `Avogadro`
 - [ ] Command-line arguments for `BeadTracker` and `Avogadro`
 
 ## Authors
 
-TODO: add author names, course and university.
+| Name |
+|------|
+| Hananeh Hasanlo |
+| Suniya Parto |
+| Homa Bayrami |
+| Iman Bazargan |
+| Pouria Imani |
+
+Developed as a Data Structures course project.
 
 ## License
 
-TODO: choose a license, or state that this project is for educational use only.
+This project is licensed under the [MIT License](LICENSE).
