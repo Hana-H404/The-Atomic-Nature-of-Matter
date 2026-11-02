@@ -29,7 +29,7 @@ public class Blob implements IBlob {
 
     @Override
     public String toString() {
-        // str : mass (center_x, center_y)
+        // ---str : mass (center_x, center_y)
         return String.format(Locale.US, "%d (%.4f, %.4f)", mass, getCenterX(), getCenterY());
     }
 

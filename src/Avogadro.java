@@ -10,6 +10,9 @@ public class Avogadro {
     // ---Constructor------------------------------------------------------------------
     public Avogadro(double d_time) throws IOException {
 
+        if (d_time <= 0)
+            throw new IllegalArgumentException("Time must be positive");
+
         this.d_time = d_time;
 
         Double distance;
@@ -22,6 +25,8 @@ public class Avogadro {
             sumSquaredDistances += Math.pow(distance, 2);
             count++;
         }
+
+        reader.close();
     }
 
     // -----------------------------------------------------------------------------------

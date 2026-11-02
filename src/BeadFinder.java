@@ -15,8 +15,8 @@ public class BeadFinder {
 
     private final ArrayList<IBlob> blobs;
 
-    private final int[] dx = { 0, 1, 0, -1 };
-    private final int[] dy = { -1, 0, 1, 0 };
+    private static final int[] dx = { 0, 1, 0, -1 };
+    private static final int[] dy = { -1, 0, 1, 0 };
 
     // ---Constructor---------------------------------
     public BeadFinder(Picture picture, double tau) {
