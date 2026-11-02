@@ -380,8 +380,6 @@ Let `W × H` be the image size, `F` the number of frames and `B` the number of b
 | Iman Bazargan |
 | Pouria Imani |
 
-Developed as a Data Structures course project.
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
