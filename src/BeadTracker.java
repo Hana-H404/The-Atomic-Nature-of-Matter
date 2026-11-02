@@ -75,22 +75,22 @@ public class BeadTracker {
         IBlob[] previousBeads, currentBeads;
         ArrayList<Double> distances;
 
-        try (Writer writer = new FileWriter(outputFilePath)) {
+        var writer = new DistanceWriter();
 
-            previousBeads = getPictureBeads(picturePaths[0]);
+        previousBeads = getPictureBeads(picturePaths[0]);
 
-            for (int i = 1; i < picturePaths.length; i++) {
+        for (int i = 1; i < picturePaths.length; i++) {
 
-                currentBeads = getPictureBeads(picturePaths[i]);
+            currentBeads = getPictureBeads(picturePaths[i]);
+            distances = processPairOfFrames(previousBeads, currentBeads);
 
-                distances = processPairOfFrames(previousBeads, currentBeads);
+            for (double distance : distances)
+                writer.saveDistance(distance);
 
-                for (double distance : distances)
-                    writer.write(String.format(Locale.US, "%.4f%n", distance));
-
-                previousBeads = currentBeads;
-            }
+            previousBeads = currentBeads;
         }
+
+        writer.close();
     }
 
     // ---Test_Method:main()-------------------------------------------
