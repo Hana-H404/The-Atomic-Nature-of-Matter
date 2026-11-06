@@ -62,14 +62,11 @@ public class BeadTracker implements IBeadTracker {
     }
 
     @Override
-    public  void trackFrames(String[] picturePaths, String outputFilePath) throws IOException {
+    public void trackFrames(String[] picturePaths) throws IOException {
 
         // no pair of frames to track!!
         if (picturePaths == null || picturePaths.length < 2)
             throw new IllegalArgumentException("Frames cannot be less than two ot empty!!");
-
-        if (outputFilePath == null)
-            throw new IllegalArgumentException("The path of the output put file can not be empty!!");
 
         IBlob[] previousBeads, currentBeads;
         ArrayList<Double> distances;
@@ -102,11 +99,11 @@ public class BeadTracker implements IBeadTracker {
         int minPixels = 25;
         int frameCount = 200;
 
-        String runDirectory = "D:\\Uni\\3rd_Semester\\Data_Structures\\Geeks\\1st_projecy_ANoM\\image folders\\run_1";
-        String outputFile = "displacements-run_1.txt";
+        String runDirectory = "D:\\Uni\\Java_Projects\\The_Atomin_Nature_Of_Matter\\Dataset\\run_1";
 
         System.out.print("Enter delta: ");
         double delta = scanner.nextDouble();
+        scanner.close();
 
         String[] picturePaths = new String[frameCount];
 
@@ -119,9 +116,8 @@ public class BeadTracker implements IBeadTracker {
 
         IBeadTracker tracker = BeadFactory.createBeadTracker(delta, tau, minPixels);
 
-        tracker.trackFrames(picturePaths, outputFile);
+        tracker.trackFrames(picturePaths);
 
         System.out.println("Tracking completed successfully!");
-        System.out.println("Output: " + outputFile);
     }
 }
