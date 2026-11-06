@@ -88,36 +88,4 @@ public class BeadTracker implements IBeadTracker {
 
         writer.close();
     }
-
-    // ---Test_Method:main()-------------------------------------------
-    public static void main(String[] args) throws IOException {
-
-        Scanner scanner = new Scanner(System.in);
-        scanner.useLocale(Locale.US);
-
-        double tau = 180.0;
-        int minPixels = 25;
-        int frameCount = 200;
-
-        String runDirectory = "D:\\Uni\\Java_Projects\\The_Atomin_Nature_Of_Matter\\Dataset\\run_1";
-
-        System.out.print("Enter delta: ");
-        double delta = scanner.nextDouble();
-        scanner.close();
-
-        String[] picturePaths = new String[frameCount];
-
-        for (int i = 0; i < frameCount; i++) {
-
-            String fileName = String.format(Locale.US, "frame%05d.jpg", i);
-
-            picturePaths[i] = runDirectory + "/" + fileName;
-        }
-
-        IBeadTracker tracker = BeadFactory.createBeadTracker(delta, tau, minPixels);
-
-        tracker.trackFrames(picturePaths);
-
-        System.out.println("Tracking completed successfully!");
-    }
 }
