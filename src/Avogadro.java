@@ -1,6 +1,6 @@
 import java.io.IOException;
 
-public class Avogadro {
+public class Avogadro implements IAvogadro{
 
     private double sumSquaredDistances = 0;
     private int count = 0;
@@ -16,7 +16,7 @@ public class Avogadro {
         this.d_time = d_time;
 
         Double distance;
-        var reader = new DistanceReader();
+        IDistanceReader reader = BeadFactory.createDistanceReader();
 
         while ((distance = reader.readNextDistance()) != null) {
 
@@ -30,6 +30,7 @@ public class Avogadro {
     }
 
     // -----------------------------------------------------------------------------------
+    @Override
     public void showAvogadro() {
         avogadro = 8.31446 / calculateK();
 
@@ -70,7 +71,7 @@ public class Avogadro {
 
     // ----------------------------------------------------------------------
     public static void main(String[] args) throws IOException {
-        var avo = new Avogadro(0.5);
+        IAvogadro avo = BeadFactory.createAvogadro(0.5);
         avo.showAvogadro();
     }
 }

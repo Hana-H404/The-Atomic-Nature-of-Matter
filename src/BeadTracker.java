@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class BeadTracker {
+public class BeadTracker implements IBeadTracker {
     private double delta;
     private double tau;
     private int minPixels;
@@ -29,8 +29,8 @@ public class BeadTracker {
     // -----------------------------------------------------
     // -----------------------------------------------------
     private IBlob[] getPictureBeads(String address) {
-        Picture picture = new Picture(address);
-        var finder = new BeadFinder(picture, tau);
+        IPicture picture = BeadFactory.createPicture(address);
+        IBeadFinder finder = BeadFactory.createBeadFinder(picture, tau);
 
         return finder.getBeads(minPixels);
     }
@@ -61,7 +61,8 @@ public class BeadTracker {
         return validDistances;
     }
 
-    private void trackFrames(String[] picturePaths, String outputFilePath) throws IOException {
+    @Override
+    public  void trackFrames(String[] picturePaths, String outputFilePath) throws IOException {
 
         // no pair of frames to track!!
         if (picturePaths == null || picturePaths.length < 2)
@@ -73,7 +74,7 @@ public class BeadTracker {
         IBlob[] previousBeads, currentBeads;
         ArrayList<Double> distances;
 
-        var writer = new DistanceWriter();
+        IDistanceWriter writer = BeadFactory.createDistanceWriter();
 
         previousBeads = getPictureBeads(picturePaths[0]);
 
@@ -116,7 +117,7 @@ public class BeadTracker {
             picturePaths[i] = runDirectory + "/" + fileName;
         }
 
-        BeadTracker tracker = new BeadTracker(delta, tau, minPixels);
+        IBeadTracker tracker = BeadFactory.createBeadTracker(delta, tau, minPixels);
 
         tracker.trackFrames(picturePaths, outputFile);
 

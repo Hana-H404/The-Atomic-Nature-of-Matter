@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Stack;
 import java.awt.Color;
 
-public class BeadFinder {
-    private final Picture picture;
+public class BeadFinder implements IBeadFinder {
+    private final IPicture picture;
 
     private final int width;
     private final int height;
@@ -19,7 +19,7 @@ public class BeadFinder {
     private static final int[] dy = { -1, 0, 1, 0 };
 
     // ---Constructor---------------------------------
-    public BeadFinder(Picture picture, double tau) {
+    public BeadFinder(IPicture picture, double tau) {
         this.picture = picture;
         this.tau = tau;
 
@@ -36,6 +36,7 @@ public class BeadFinder {
     }
 
     // ------------------------------------------------
+    @Override
     public IBlob[] getBeads(int min) {
 
         ArrayList<IBlob> beads = new ArrayList<>();
@@ -49,6 +50,11 @@ public class BeadFinder {
         return beads.toArray(new IBlob[0]);
     }
 
+    @Override
+    public int totalBlobSize() {
+        return blobs.size();
+    }
+
     // -------------------------------------------------
     private void findBlobs() {
         for (int i = 0; i < width; i++) {
@@ -56,7 +62,7 @@ public class BeadFinder {
             for (int j = 0; j < height; j++) {
 
                 if (isForeground[i][j] && !isVisited[i][j]) {
-                    IBlob blob = new Blob();
+                    IBlob blob = BeadFactory.createBlob();
                     dfsSearch(blob, i, j);
                     blobs.add(blob);
                 }
@@ -138,16 +144,16 @@ public class BeadFinder {
         }
 
         // Read image
-        Picture picture = new Picture(imagePath);
+        IPicture picture = BeadFactory.createPicture(imagePath);
 
         // Create BeadFinder
-        BeadFinder finder = new BeadFinder(picture, tau);
+        IBeadFinder finder = BeadFactory.createBeadFinder(picture, tau);
 
         // Find valid beads
         IBlob[] beads = finder.getBeads(min);
 
         // Test results
-        int totalBlobs = finder.blobs.size();
+        int totalBlobs =finder.totalBlobSize();
         int totalBeads = beads.length;
 
         System.out.println("Image: " + imagePath);
