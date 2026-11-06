@@ -31,10 +31,14 @@ public class Avogadro implements IAvogadro{
 
     // -----------------------------------------------------------------------------------
     @Override
-    public void showAvogadro() {
-        avogadro = 8.31446 / calculateK();
+    public String showAvogadro() {
+        double k = calculateK();
+        avogadro = 8.31446 / k;
 
-        System.out.println("Avogadro: " + avogadro);
+        System.out.println("Avogadro = " + avogadro);
+        System.out.println("boltzmann = " + k);
+
+        return "Avogadro = " + avogadro + "\n" + "boltzmann = " + k;
     }
 
     // -------------------------------------------------------------------------------------

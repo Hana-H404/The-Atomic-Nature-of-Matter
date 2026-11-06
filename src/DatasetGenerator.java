@@ -60,7 +60,12 @@ public class DatasetGenerator implements IDatasetGenerator {
         String fileName;
         File pictureFile;
 
-        for (int i = 0; i < frameCount; i++) {
+        int start = 0;
+        File first = new File(runDirectory, "frame00000.jpg");
+        if (!first.isFile())
+            start = 1;
+
+        for (int i = start; i < start + frameCount; i++) {
 
             fileName = String.format(Locale.US, "frame%05d.jpg", i);
 

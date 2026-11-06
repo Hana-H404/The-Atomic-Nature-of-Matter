@@ -1,5 +1,5 @@
 public interface IAvogadro {
 
 
-    void showAvogadro();
+    String showAvogadro();
 }
