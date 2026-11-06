@@ -29,8 +29,11 @@ public final class BeadFactory {
         return new Avogadro(dTime);
     }
 
-    public static IBlob createBlob(){ return  new Blob();}
+    public static IBlob createBlob() {
+        return new Blob();
+    }
 
-
-    public static IPicture createPicture(String path){return new PictureAdapter(path);}
+    public static IPicture createPicture(String path) {
+        return new PictureAdapter(path);
+    }
 }
