@@ -73,4 +73,9 @@ public class Avogadro implements IAvogadro{
         return K;
     }
 
+    // ----------------------------------------------------------------------
+    public static void main(String[] args) throws IOException {
+        IAvogadro avo = BeadFactory.createAvogadro(0.5);
+        avo.showAvogadro();
+    }
 }

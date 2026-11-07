@@ -55,4 +55,24 @@ public class Blob implements IBlob {
         return sumY / (double) mass;
     }
 
+    // ---Testing the validity of this class-----------------------------
+    public static void main(String[] args) {
+        var b = new Blob();
+        try {
+            b.getCenterX();
+        } catch (IllegalStateException e) {
+            System.out.println("empty blob handled");
+        }
+        b.add(0, 0);
+        b.add(1, 1);
+
+        System.out.println(b.toString());
+
+        var b2 = new Blob();
+        b2.add(1, 0);
+        b2.add(2, 1);
+        System.out.println(b2.toString());
+
+        System.out.println(b.distanceTo(b2));
+    }
 }
